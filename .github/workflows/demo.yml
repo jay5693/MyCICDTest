@@ -26,7 +26,7 @@ jobs:
       - name: Deploy to OCI
         run: |
           ssh -tt -o StrictHostKeyChecking=no ${{secrets.OCI_USER}}@${{secrets.OCI_PUBLIC_IP}} << 'EOF'
-            # Check if the directory exists and if it's a valid Git repository
+            echo "Checking if the directory exists and if it's a valid Git repository..."
             if [ ! -d "/home/ubuntu/MyCICDTest/.git" ]; then
               echo "Directory not a Git repository. Cloning the repository..."
               rm -rf /home/ubuntu/MyCICDTest
@@ -37,5 +37,13 @@ jobs:
               echo "Git repository exists. Pulling latest changes..."
               cd /home/ubuntu/MyCICDTest
               git pull origin master
+            fi
+
+            echo "Checking if hello.py exists before running..."
+            if [ -f "/home/ubuntu/MyCICDTest/hello.py" ]; then
+              echo "Running Python script..."
+              python3 /home/ubuntu/MyCICDTest/hello.py
+            else
+              echo "hello.py not found!"
             fi
           EOF
