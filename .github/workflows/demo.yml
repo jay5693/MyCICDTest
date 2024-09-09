@@ -25,24 +25,25 @@ jobs:
 
       - name: Deploy to OCI
         run: |
-          ssh -t -o StrictHostKeyChecking=no ${{secrets.OCI_USER}}@${{secrets.OCI_PUBLIC_IP}} << 'EOF'
-            # Check if directory exists and clone repo if not
-            if [ ! -d "/home/ubuntu/MyCICDTest" ]; then
-              cd /home/ubuntu
-              mkdir -p MyCICDTest
-              cd MyCICDTest
-              git clone https://github.com/your-repository.git .
+          ssh -tt -o StrictHostKeyChecking=no ${{secrets.OCI_USER}}@${{secrets.OCI_PUBLIC_IP}} << 'EOF'
+            # Check if the directory exists and if it's a valid Git repository
+            if [ ! -d "/home/ubuntu/MyCICDTest/.git" ]; then
+              echo "Directory not a Git repository. Cloning the repository..."
+              rm -rf /home/ubuntu/MyCICDTest
+              mkdir -p /home/ubuntu/MyCICDTest
+              cd /home/ubuntu/MyCICDTest
+              git clone https://github.com/jay5693/MyCICDTest.git .
             else
+              echo "Git repository exists. Pulling latest changes..."
               cd /home/ubuntu/MyCICDTest
               git pull origin master
             fi
 
-            # Run Python script (use python3)
-            if command -v python3 &> /dev/null; then
+            # Check if hello.py exists before running
+            if [ -f "/home/ubuntu/MyCICDTest/hello.py" ]; then
+              echo "Running Python script..."
               python3 hello.py
             else
-              echo "Python3 is not installed, installing now..."
-              sudo apt-get update && sudo apt-get install -y python3
-              python3 hello.py
+              echo "hello.py not found!"
             fi
           EOF
