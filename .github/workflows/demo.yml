@@ -34,6 +34,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{secrets.OCI_USER}}@${{secrets.OCI_PUBLIC_IP}} << 'EOF'
             cd /home/ubuntu/MyCICDTest
             git pull origin master
+            python 3 hello.py
           EOF
           
         
