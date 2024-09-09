@@ -38,12 +38,4 @@ jobs:
               cd /home/ubuntu/MyCICDTest
               git pull origin master
             fi
-
-            # Check if hello.py exists before running
-            if [ -f "/home/ubuntu/MyCICDTest/hello.py" ]; then
-              echo "Running Python script..."
-              python3 hello.py
-            else
-              echo "hello.py not found!"
-            fi
           EOF
