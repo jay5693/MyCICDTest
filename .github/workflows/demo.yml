@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: echo command
+        run: echo hello action!
 
       # Runs a single command using the runners shell
       - name: Install SSH Client
